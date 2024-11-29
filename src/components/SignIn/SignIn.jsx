@@ -69,7 +69,7 @@ const SignIn = () => {
       <div className='signup-wrapper'>
         <h2 className='signUp-header'>
           {' '}
-          Login on <span style={{ color: 'var(--theme)' }}>Financely.</span>
+          Login on <span style={{ color: 'var(--theme)' }}>BudgetBee.</span>
         </h2>
         <form>
           <FormInput

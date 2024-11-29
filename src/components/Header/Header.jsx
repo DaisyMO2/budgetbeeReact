@@ -34,7 +34,7 @@ const Header = () => {
 
   return (
     <div className='navbar-menu'>
-      <p className='logo'> Financely </p>
+      <p className='logo'> BudgetBee </p>
       <div className='navbar-side-panel'>
         <Link className='nav-headers' to='/dashboard'>
           Dashboard
