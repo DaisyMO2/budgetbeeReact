@@ -11,6 +11,7 @@ export const useTransaction = () => useContext(TransactionsContext);
 const TransactionsProvider = ({ children }) => {
   const [user] = useAuthState(auth);
   const [transactions, setTransactions] = useState([]);
+  const [budget, setBudget] = useState(0); // Add budget state
   const [customTags, setCustomTags] = useState([]);
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
@@ -21,10 +22,58 @@ const TransactionsProvider = ({ children }) => {
     //get all docs from firebase collection
     fetchTransaction();
   }, [user]);
+  useEffect(() => {
+    fetchTransaction();
+    fetchBudget(); // Fetch budget on initialization
+  }, [user]);
 
   useEffect(() => {
     calculateBalance();
   }, [transactions]);
+
+    // Function to add a budget to Firestore
+    const addBudget = async (newBudget) => {
+      if (!user) {
+        toast.error('User not authenticated');
+        return;
+      }
+      try {
+        const budgetDoc = { budget: newBudget, timestamp: new Date() };
+        await addDoc(collection(db, `users/${user.uid}/budgets`), budgetDoc);
+        setBudget(newBudget); // Update local state
+        toast.success('Budget saved successfully!');
+      } catch (error) {
+        console.error('Error saving budget:', error);
+        toast.error('Failed to save budget.');
+      }
+    };
+  
+    // Function to fetch the most recent budget from Firestore
+    const fetchBudget = async () => {
+      if (!user) return;
+  
+      try {
+        // Query Firestore for the budget
+        const q = query(collection(db, `users/${user.uid}/budgets`));
+        const querySnapshot = await getDocs(q);
+  
+        let latestBudget = 0;
+  
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.budget) {
+            latestBudget = data.budget;
+          }
+        });
+
+        
+  
+        setBudget(latestBudget); // Set the fetched budget value
+      } catch (error) {
+        console.error('Error fetching budget:', error);
+      }
+    };
+  
 
   async function addTransaction(transaction, many) {
     try {
@@ -110,6 +159,9 @@ const TransactionsProvider = ({ children }) => {
         transactions,
         addTransaction,
         fetchTransaction,
+        budget,
+        addBudget, // Expose addBudget to components
+        fetchBudget, // Expose fetchBudget
         fetchCustomTag,
         customTags,
         addTag,

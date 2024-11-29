@@ -13,13 +13,7 @@ import { toast } from 'react-toastify';
 const env = import.meta.env;
 
 const firebaseConfig = {
-  apiKey: 
-  authDomain: 
-  projectId: 
-  storageBucket: 
-  messagingSenderId: 
-  appId: 
-  measurementId: "
+// add config files
 };
 
 // Initialize Firebase
