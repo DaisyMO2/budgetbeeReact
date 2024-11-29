@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'; // Add useEffect here
 import './App.css';
 import Header from './components/Header/Header.jsx';
 import { Routes, Route } from 'react-router-dom';
@@ -11,16 +12,30 @@ import TransactionsTable from './pages/Transactions/TransactionsTable.jsx';
 import ProtectedRoute from './routes/ProtectedRoutes.jsx';
 
 function App() {
+  useEffect(() => {
+    const tawkToScript = document.createElement("script");
+    tawkToScript.async = true;
+    tawkToScript.src = "https://embed.tawk.to/6749d6434304e3196aea78f8/1ids6pu99";
+    tawkToScript.charset = "UTF-8";
+    tawkToScript.setAttribute("crossorigin", "*");
+    document.body.appendChild(tawkToScript);
+
+    // Cleanup the script when component unmounts
+    return () => {
+      document.body.removeChild(tawkToScript);
+    };
+  }, []);
+
   return (
     <>
       <TransactionsProvider>
         <ToastContainer />
         <Header />
         <Routes>
-          <Route path='/' element={<SignIn />} />
-          <Route path='sign-up' element={<SignUp />} />
+          <Route path="/" element={<SignIn />} />
+          <Route path="sign-up" element={<SignUp />} />
           <Route
-            path='dashboard'
+            path="dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
@@ -28,7 +43,7 @@ function App() {
             }
           />
           <Route
-            path='transactions'
+            path="transactions"
             element={
               <ProtectedRoute>
                 <TransactionsTable />
