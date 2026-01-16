@@ -12,9 +12,6 @@ import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 const env = import.meta.env;
 
-const firebaseConfig = {
-// add config files
-};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
